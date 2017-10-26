@@ -42,7 +42,7 @@ $("#submit").on('click', function(e){
   return false;
 }); 
 
-train.on("child_added", function(childSnapshot, prevChildKey){
+train.on("child_added", function(childSnapshot){
 
   var name = childSnapshot.val().name;
   var destination = childSnapshot.val().destination;
