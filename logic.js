@@ -1,4 +1,5 @@
-var config = {
+$(document).ready(function(){
+  var config = {
     apiKey: "AIzaSyAVGmdHI_OOWwfU9pwh_wSdkq6AHUpQmM8",
     authDomain: "train-60af8.firebaseapp.com",
     databaseURL: "https://train-60af8.firebaseio.com",
@@ -11,13 +12,16 @@ var config = {
   var train = firebase.database().ref();
 
 
-$("#submit").on('click', function(e){
+$("#submit").on('click', function(e) {
+
+  e.preventDefault();
 
   var name = $('#name').val().trim();
   var destination = $('#destination').val().trim();
-  var firstTime = $('#firstTime').val().trim();
+  var firstTime = moment($('#firstTime').val().trim(), "HH:mm").subtract(10,"years").format("X");
   var frequency = $('#frequency').val().trim();
 
+  console.log(name,destination,firstTime);
 
   var newTrain = {
     name: name,
@@ -54,12 +58,16 @@ train.on("child_added", function(childSnapshot){
   console.log(firstTime);
   console.log(frequency);
 
+  var remain = moment().diff(moment.unix(firstTime),"min")%frequency;
+  var min = frequency - remain;
+  var arrive = moment().add(min,"m").format("HH:mm A");
+
   var firstTrain = moment(firstTime);
 
   var currentTime = moment();
 
-  $('.table').append("<tr><td>"+ name +"</td><td>"+ destination +"</td><td>"+ firstTime +"</td><td>"+ frequency +"</td><td>##</td></tr>");
-})
+  $('.table').append("<tr><td>"+ name +"</td><td>"+ destination +"</td><td>"+ frequency +"</td><td>" + arrive +"</td><td>"+ min +"</td></tr>");
+})});
 
 
 
